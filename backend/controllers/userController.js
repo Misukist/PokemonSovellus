@@ -10,13 +10,21 @@ export const getUsers = async  (req, res) => {
     }
 };
 
-export const createUsers = async (req, res) => {
-    const {email, password} = req.body;
+export const getUserProfile = async (req, res) => {
+    const { id } = req.params;
+
     try {
-        const newUser = new User({email, password});
-        await newUser.save();
-        res.status(201).json(newUser);
+        const user = await User.findById(id).select("-password");
+
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        res.status(200).json(user);
+
     } catch (error) {
-         res.status(400).json({ error: error.message });
+        console.log("Error in getUserProfile:", error.message);
+        res.status(500).json({ error: error.message });
     }
-}
+};
+
