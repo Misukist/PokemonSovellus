@@ -6,7 +6,7 @@ import bcrypt from 'bcryptjs';
 
 
 export const createUsers = async (req, res) => {
-    const {email, password} = req.body;
+    const {username, email, password} = req.body;
     try {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(email)) {
@@ -21,7 +21,7 @@ export const createUsers = async (req, res) => {
         }
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
-        const newUser = new User({email: email, password: hashedPassword});
+        const newUser = new User({username:username, email: email, password: hashedPassword});
         if(newUser) {
             generateTokenAndSetCookie(newUser._id, res)
             await newUser.save();

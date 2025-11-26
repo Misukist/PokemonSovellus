@@ -15,8 +15,6 @@ const NavBar = () => {
     const isMyCollection = location.pathname === "/collection";
 
 
-
-
     return (
         <div
         className={`w-full py-4 px-2 top-0 z-50 shadow-xl/20 transition-all duration-300 ${

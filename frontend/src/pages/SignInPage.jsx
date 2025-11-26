@@ -1,7 +1,30 @@
+import { useState } from "react";
+import { loginUser } from "../api/auth.js";
+import { useNavigate } from "react-router-dom";
+
+
 const SignIn = () => {
 
-  const handleSubmit = () => {
-    alert('Form submitted!');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [msg, setMsg] = useState("");
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const data = await loginUser(email, password);
+      if(data.accessToken) {
+        console.log("Login success! Navigating to /cards");
+        navigate("/cards");
+      } else {
+        console.log("Login failed:", data.error);
+        setMsg(data.error);
+      }
+    } catch (error) {
+      setMsg("Jokin meni pieleen");
+      console.log(error)
+    }
   };
 
   return (
@@ -21,6 +44,8 @@ const SignIn = () => {
               <input
                 type="email or username"
                 placeholder="Enter your username or email"
+                value={email}
+                onChange={e => setEmail(e.target.value)}
                 className="w-full px-4 py-3 rounded-lg bg-neutral-800 border border-neutral-700 text-white text-base focus:outline-none focus:ring-1 focus:ring-red-600"
               />
             </div>
@@ -31,6 +56,8 @@ const SignIn = () => {
               <input
                 type="password"
                 placeholder="Enter your password"
+                value={password}
+                onChange={e => setPassword(e.target.value)}
                 className="w-full px-4 py-3 rounded-lg bg-neutral-800 border border-neutral-700 text-white text-base focus:outline-none focus:ring-1 focus:ring-red-600"
               />
             </div>

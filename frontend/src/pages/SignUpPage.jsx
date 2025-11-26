@@ -1,8 +1,32 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { signUp } from "../api/auth";
+
+
 const SignUp = () => {
 
-    const handleSubmit = () => {
-    alert('Form submitted!');
-    };
+  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [msg, setMsg] = useState("");
+  const navigate = useNavigate();
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+          const data = await signUp(username, email, password);
+          if(data.accessToken) {
+            console.log("Account Created Navigating to /home");
+            navigate("/");
+          } else {
+            console.log("signup failed:", data.error);
+            setMsg(data.error);
+          }
+        } catch (error) {
+          setMsg("Jokin meni pieleen");
+          console.log(error)
+        }
+      };
 
   return (
     <div className="flex justify-center items-center w-screen h-screen bg-linear-to-br from-neutral-900 to-neutral-950">
@@ -22,6 +46,8 @@ const SignUp = () => {
             <input
               type="text"
               placeholder="Enter your username"
+              value={username}
+              onChange={e => setUsername(e.target.value)}
               className="w-full px-4 py-3 rounded-lg bg-neutral-800 border border-neutral-700 text-white text-base focus:outline-none focus:ring-1 focus:ring-purple-600"
             />
           </div>
@@ -32,6 +58,8 @@ const SignUp = () => {
             <input
               type="email"
               placeholder="Enter your email"
+              value={email}
+              onChange={e => setEmail(e.target.value)}
               className="w-full px-4 py-3 rounded-lg bg-neutral-800 border border-neutral-700 text-white text-base focus:outline-none focus:ring-1 focus:ring-purple-600"
             />
           </div>
@@ -42,6 +70,8 @@ const SignUp = () => {
             <input
               type="password"
               placeholder="Enter your password"
+              value={password}
+              onChange={e => setPassword(e.target.value)}
               className="w-full px-4 py-3 rounded-lg bg-neutral-800 border border-neutral-700 text-white text-base focus:outline-none focus:ring-1 focus:ring-purple-600"
             />
           </div>

@@ -9,5 +9,6 @@ export const generateTokenAndSetCookie = (userId, res) => {
         sameSite: "strict",       // estää CSRF hyökkäyksiä
         maxAge: 3600000           // 1 tunti
     });
-
+    
+    res.status(200).json({ accessToken });
 };

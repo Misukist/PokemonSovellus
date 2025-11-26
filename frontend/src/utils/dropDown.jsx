@@ -1,10 +1,11 @@
 import { useState, useRef, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ModalLiveDemoExample } from "../components/Settings.Modal";
 
 export function DropDown() {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
+  const navigate = useNavigate();
 
   // Sulkee dropdownin kun klikataan ulos
   useEffect(() => {
@@ -16,6 +17,19 @@ export function DropDown() {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+  
+
+  const handleLogout = async () => {
+    try {
+      await fetch("http://localhost:3000/api/auth/logout", {
+        method: "POST",
+        credentials: "include"
+        });
+      navigate("/signin");
+      } catch (error) {
+        console.error("Logout failed", error);
+      }};
+  
 
   return (
     <div ref={dropdownRef} className="relative">
@@ -55,7 +69,7 @@ export function DropDown() {
 
         <hr className="border-t border-neutral-600 mx-3 mt-2" />
 
-        <Link to="#" className="flex gap-1 px-4 pb-2 text-white hover:text-red-900 cursor-pointer rounded-md">
+        <Link to="#" onClick={handleLogout} className="flex gap-1 px-4 pb-2 text-white hover:text-red-900 cursor-pointer rounded-md">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6">
             <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 9V5.25A2.25 2.25 0 0110.5 3h6a2.25 2.25 0 012.25 2.25v13.5A2.25 2.25 0 0116.5 21h-6a2.25 2.25 0 01-2.25-2.25V15m-3 0-3-3m0 0 3-3m-3 3H15" />
           </svg>
