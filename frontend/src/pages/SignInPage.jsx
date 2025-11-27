@@ -16,7 +16,7 @@ const SignIn = () => {
       const data = await loginUser(email, password);
       if(data.accessToken) {
         console.log("Login success! Navigating to /cards");
-        navigate("/cards");
+        window.location.href = "/cards";
       } else {
         console.log("Login failed:", data.error);
         setMsg(data.error);

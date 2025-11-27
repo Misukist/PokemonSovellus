@@ -1,5 +1,3 @@
-
-
 export async function loginUser(email, password) {
     const res = await fetch("http://localhost:3000/api/auth/login", {
         method: "POST",

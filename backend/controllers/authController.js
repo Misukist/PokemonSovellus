@@ -66,11 +66,11 @@ export const login = async (req ,res) => {
 
        generateTokenAndSetCookie(user.id, res);
 
-        res.status(200).json({email: user.email});
+        return res.status(200).json({email: user.email});
 
         } catch (error) {
         console.log("Error in login controller", error.message);
-        res.status(500).json({error: "Internal Server Error"});
+        return res.status(500).json({error: "Internal Server Error"});
 
     }
 };
@@ -83,7 +83,7 @@ export const logout = async (req, res) => {
         console.log("Error in logout controller", error.message);
         res.status(500).json({error: "Internal Server error"});
     }
-}
+};
 
 export const cards = async (req, res) => {
     try {
@@ -93,4 +93,15 @@ export const cards = async (req, res) => {
         console.log("Error in cards controller", error.message);
         res.status(500).json({error: "Internal Server Error"});
     }
-}
+};
+
+
+export const getMe = async (req, res) => {
+    try {
+        const user = await User.findById(req.user.userId).select("-password");
+        res.status(200).json(user);
+    } catch (error) {
+        console.log("Error in getMe controller", error.message); 
+        res.status(500).json({error: "Internal Server Error"});
+    }
+};

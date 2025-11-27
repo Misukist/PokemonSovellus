@@ -17,7 +17,7 @@ const SignUp = () => {
           const data = await signUp(username, email, password);
           if(data.accessToken) {
             console.log("Account Created Navigating to /home");
-            navigate("/");
+            window.location.href = "/";
           } else {
             console.log("signup failed:", data.error);
             setMsg(data.error);
