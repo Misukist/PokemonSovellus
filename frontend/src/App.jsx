@@ -59,7 +59,7 @@ function App() {
 		<Route path="/" element={<HomePage/>} />
 
         {/* Protected pages */}
-        <Route path="/cards" element={authUser ? <CardsPage /> : <Navigate to="/signin" />} />
+        <Route path="/cards" element={<CardsPage />} />
         <Route path="/collection" element={authUser ? <CollectionPage /> : <Navigate to="/signin" />} />
         <Route path="/profile" element={authUser ? <ProfilePage /> : <Navigate to="/signin" />} />
 

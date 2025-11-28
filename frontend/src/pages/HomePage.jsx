@@ -34,7 +34,7 @@ const HomePage = () => {
           <button className="bg-linear-to-r transition duration-500 ease-in-out from-purple-800 to-purple-950 rounded-full px-9 py-4 text-lg md:text-xl lg:text-2xl hover:to-red-600 shadow-lg shadow-neutral-900 hover:shadow-red-500/50">
             Go to the expansion page
           </button>
-          <button className="bg-linear-to-r transition duration-500 ease-in-out from-red-800 to-red-950 rounded-full px-9 py-4 text-lg md:text-xl lg:text-2xl hover:to-purple-600 shadow-lg shadow-neutral-900 hover:shadow-purple-500/50">
+          <button  className="bg-linear-to-r transition duration-500 ease-in-out from-red-800 to-red-950 rounded-full px-9 py-4 text-lg md:text-xl lg:text-2xl hover:to-purple-600 shadow-lg shadow-neutral-900 hover:shadow-purple-500/50">
             See Card Gallery
           </button>
         </div>
