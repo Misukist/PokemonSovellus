@@ -22,7 +22,11 @@
 
     "jsonwebtoken": "^9.0.2",
 
-    "mongoose": "^8.19.3"
+    "mongoose": "^8.19.3",
+
+    "node-cache": "^5.1.2",
+
+    "pokemontcgsdk": "^2.0.0"
 
   }
 

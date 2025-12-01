@@ -1,21 +1,22 @@
+import { useState, useEffect } from "react";
 import CardList from "../components/CardList";
 
 const CardsPage = () => {
+  const [search, setSearch] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
+
+  // Debounce: odota 500ms ennen kuin päivitämme debouncedSearch
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedSearch(search);
+    }, 500);
+
+    return () => clearTimeout(handler);
+  }, [search]);
+
   return (
     <div className="relative flex flex-col min-h-screen text-white bg-neutral-900">
-
-      {/* Taustakuva (valinnainen, jos haluat kuvan) */}
-      {/* <div className="absolute inset-0 z-0">
-        <img
-          src={backgroundImage} // esim. jokin taustakuva
-          alt="BG"
-          className="w-full h-full object-cover"
-        />
-      </div> */}
-
-      {/* Sisältö */}
       <div className="relative z-10">
-
         {/* Ylin palkki: otsikko + search */}
         <div className="w-full p-4 flex flex-col md:flex-row items-center justify-between shadow-md bg-linear-to-r from-slate-950 via-red-950/60 to-slate-950">
           <h2 className="text-white text-xl font-bold mb-2 md:mb-0">
@@ -42,16 +43,17 @@ const CardsPage = () => {
             <input
               type="text"
               placeholder="Search cards..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
               className="w-full pl-10 pr-3 py-2 rounded-md border bg-slate-900/70 text-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-slate-900 hover:ring-1 hover:bg-slate-950/70 focus:bg-slate-950 transition-all duration-200"
             />
           </div>
         </div>
 
-        {/* Pieni viiva otsikon alle */}
         <div className="bg-linear-to-r h-1 mb-9 from-red-900 via-purple-950 to-red-900" />
 
         {/* Card lista */}
-        <CardList />
+        <CardList search={debouncedSearch} />
       </div>
     </div>
   );

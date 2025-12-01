@@ -1,0 +1,16 @@
+[
+  {
+    "id": "xy2-1",
+    "name": "Venusaur",
+    "imageUrl": "https://images.pokemontcg.io/xy2/1.png",
+    "types": ["Grass"],
+    "hp": "140"
+  },
+  {
+    "id": "xy2-2",
+    "name": "Charizard",
+    "imageUrl": "https://images.pokemontcg.io/xy2/2.png",
+    "types": ["Fire"],
+    "hp": "150"
+  }
+]

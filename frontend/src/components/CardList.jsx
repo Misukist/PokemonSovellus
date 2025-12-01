@@ -1,33 +1,75 @@
-import useFetchCards from "../utils/fetchCards.js";
+import React, { useState, useEffect, useRef } from "react";
+import CardListItem from "./CardListItem.jsx";
 
-const CardList = () => {
-  const { cards, loading } = useFetchCards();
+const CardList = ({ search }) => {
+  const [cards, setCards] = useState([]);
+  const [page, setPage] = useState(1);
+  const [loading, setLoading] = useState(false);
+  const loader = useRef(null);
 
-  if (loading) return <p className="text-white text-center mt-10">Loading cards...</p>;
+  const pageSize = 20;
 
-  // Turvallinen tarkistus, jos cards ei ole taulukko
-  if (!Array.isArray(cards) || cards.length === 0) {
-    return <p className="text-white text-center mt-10">No cards found</p>;
-  }
+  const handleSaveCard = (card) => {
+    console.log("Saved card:", card);
+    // täällä voit tehdä API-kutsun MongoDB:hen
+  };
+
+  useEffect(() => {
+    setCards([]);
+    setPage(1);
+  }, [search]);
+
+  useEffect(() => {
+    const fetchCards = async () => {
+      setLoading(true);
+      try {
+        const res = await fetch(
+          `http://localhost:3000/api/cards?page=${page}&pageSize=${pageSize}&search=${encodeURIComponent(search)}`
+        );
+        const data = await res.json();
+        if (Array.isArray(data)) {
+          setCards(prev => [...prev, ...data]);
+        } else {
+          console.error("API returned invalid data:", data);
+        }
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchCards();
+  }, [page, search]);
+
+  // Infinite scroll
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && !loading) setPage(prev => prev + 1);
+      },
+      { threshold: 1 }
+    );
+
+    if (loader.current) observer.observe(loader.current);
+    return () => loader.current && observer.unobserve(loader.current);
+  }, [loading]);
 
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 p-4">
-      {cards.map((card) =>
-        card.id && card.name ? (
-          <div key={card.id} className="relative w-full h-auto rounded-xl shadow-2xl">
-            <img
-              src={card.images?.large}
-              alt={card.name}
-              className="rounded-xl w-full h-full object-cover transition-opacity duration-300 opacity-0"
-              onLoad={(e) => (e.currentTarget.style.opacity = 1)}
-            />
-          </div>
-        ) : null
-      )}
+    <div>
+      <ul className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 p-4">
+        {cards.map(card => (
+          <CardListItem
+            key={card.id}
+            card={card}
+            onSaveCard={handleSaveCard}
+          />
+        ))}
+      </ul>
+      <div ref={loader} className="text-center py-4">
+        {loading ? "Loading more cards..." : "Scroll to load more"}
+      </div>
     </div>
   );
 };
 
 export default CardList;
-
-
