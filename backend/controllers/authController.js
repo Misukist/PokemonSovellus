@@ -53,27 +53,37 @@ export const deleteUser = async (req, res) => {
 };
 
 
-export const login = async (req ,res) => {
-    try {
-        const {email, password} = req.body;
-        const user = await User.findOne({email});
-        const  isPasswordCorrect = await bcrypt.compare(password, user?.password || "");
+export const login = async (req, res) => {
+  try {
+    const { email, password } = req.body;
 
-        
-        if (!user || !isPasswordCorrect) {
-            return res.status(400).json({error: "Invalid username or password"});
-        };
-
-       generateTokenAndSetCookie(user.id, res);
-
-        return res.status(200).json({email: user.email});
-
-        } catch (error) {
-        console.log("Error in login controller", error.message);
-        return res.status(500).json({error: "Internal Server Error"});
-
+    if (!email || !password) {
+      return res.status(400).json({ error: "Email and password are required" });
     }
+
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(400).json({ error: "Invalid email or password" });
+    }
+
+    const isPasswordCorrect = await bcrypt.compare(password, user.password);
+    if (!isPasswordCorrect) {
+      return res.status(400).json({ error: "Invalid email or password" });
+    }
+
+    // Token ja cookie
+    generateTokenAndSetCookie(user.id, res);
+
+    // Palauta frontendille käyttäjäinfo
+    return res.status(200).json({ email: user.email, id: user._id });
+
+  } catch (error) {
+    console.error("Login error:", error.message);
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
 };
+
 
 export const logout = async (req, res) => {
     try {
@@ -98,10 +108,12 @@ export const cards = async (req, res) => {
 
 export const getMe = async (req, res) => {
     try {
-        const user = await User.findById(req.user.userId).select("-password");
-        res.status(200).json(user);
+        if (!req.user) return res.status(401).json({ error: "Not authenticated" });
+        // req.user on jo koko käyttäjäobjekti ilman salasanaa
+        res.status(200).json(req.user);
     } catch (error) {
         console.log("Error in getMe controller", error.message); 
         res.status(500).json({error: "Internal Server Error"});
     }
 };
+

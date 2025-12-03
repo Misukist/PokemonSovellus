@@ -1,9 +1,8 @@
-import { BrowserRouter as Router, Routes, Route, Navigate} from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import HomePage from "./pages/HomePage.jsx"
-import ExpansionsPage from "./pages/ExpansionsPage.jsx"
-import CollectionPage from "./pages/CollectionPage.jsx"
-import CardsPage from "./pages/CardsPage.jsx"
+import HomePage from "./pages/HomePage.jsx";
+import CollectionPage from "./pages/CollectionPage.jsx";
+import CardsPage from "./pages/CardsPage.jsx";
 import ProfilePage from "./pages/ProfilePage.jsx";
 import NavBar from "./components/NavBar.jsx";
 import SignUp from "./pages/SignUpPage.jsx";
@@ -14,49 +13,27 @@ import MegaEvolutionPage from "./pages/expansionPages/MegaEvolution.jsx";
 import LoadingSpinner from "./loadingSpinner.jsx";
 
 function App() {
+  const { data: authUser, isLoading } = useQuery({
+    queryKey: ["authUser"],
+    queryFn: async () => {
+      const res = await fetch("http://localhost:3000/api/auth/me", { credentials: "include" });
+      if (!res.ok) return null;
+      return res.json();
+    },
+    retry: false,
+  });
 
-	const { data: authUser, isLoading } = useQuery({
-			// we use queryKey to give a unique name to our query and refer to it later
-		queryKey: ["authUser"],
-		queryFn: async () => {
-			try {
-				const res = await fetch("http://localhost:3000/api/auth/me", {
-					credentials: "include"
-				});
-				
-				const data = await res.json();
-				if (data.error) return null;
-				if (!res.ok) {
-					throw new Error(data.error || "Something went wrong");
-				}
-				console.log("authUser is here:", data);
-				return data;
-			} catch (error) {
-				throw new Error(error);
-			}
-		},
-		retry: false,
-		});
-
-	if (isLoading) {
-		return (
-			<div className='h-screen flex justify-center items-center'>
-				<LoadingSpinner size='lg' />
-			</div>
-		);
-	}
-
+  if (isLoading) return <LoadingSpinnerFullScreen />;
 
   return (
     <>
       <NavBar authUser={authUser} />
       <Routes>
         {/* Expansion pages */}
+        <Route path="/" element={<HomePage />} />
         <Route path="/phantasmal" element={<PhantasmalPage />} />
         <Route path="/scarlet" element={<ScarletPage />} />
         <Route path="/mega" element={<MegaEvolutionPage />} />
-
-		<Route path="/" element={<HomePage/>} />
 
         {/* Protected pages */}
         <Route path="/cards" element={<CardsPage />} />
@@ -71,4 +48,10 @@ function App() {
   );
 }
 
-export default App
+const LoadingSpinnerFullScreen = () => (
+  <div className="h-screen flex justify-center items-center">
+    <LoadingSpinner size="lg" />
+  </div>
+);
+
+export default App;

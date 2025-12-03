@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { loginUser } from "../api/auth.js";
 import { useNavigate } from "react-router-dom";
+import { useQueryClient } from "@tanstack/react-query";
 
 
 const SignIn = () => {
@@ -9,23 +10,27 @@ const SignIn = () => {
   const [password, setPassword] = useState("");
   const [msg, setMsg] = useState("");
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const data = await loginUser(email, password);
-      if(data.accessToken) {
-        console.log("Login success! Navigating to /cards");
-        window.location.href = "/cards";
-      } else {
-        console.log("Login failed:", data.error);
-        setMsg(data.error);
-      }
-    } catch (error) {
-      setMsg("Jokin meni pieleen");
-      console.log(error)
+  e.preventDefault();
+  try {
+    const data = await loginUser(email, password);
+    if (!data.error) {
+      console.log("Login success! Navigating to /cards");
+
+      // Refreshaa authUser query
+      queryClient.invalidateQueries(["authUser"]);
+
+      navigate("/cards"); // React Routerin kautta
+    } else {
+      setMsg(data.error);
     }
-  };
+  } catch (error) {
+    setMsg("Jokin meni pieleen");
+    console.log(error);
+  }
+};
 
   return (
       <div className="flex justify-center items-center w-screen h-screen bg-linear-to-br from-neutral-900 to-neutral-950">

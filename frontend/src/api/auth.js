@@ -1,16 +1,26 @@
-export async function loginUser(email, password) {
+// api/auth.js
+export const loginUser = async (email, password) => {
+  try {
     const res = await fetch("http://localhost:3000/api/auth/login", {
-        method: "POST",
-        credentials: "include",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({email, password}),
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include", // tarvitaan cookieille
+      body: JSON.stringify({ email, password }),
     });
 
     const data = await res.json();
-    return data;
+
+    if (!res.ok) {
+      return { error: data.error || "Login failed" };
+    }
+
+    return data; // { email, id }
+  } catch (err) {
+    console.error("loginUser error:", err);
+    return { error: "Network error" };
+  }
 };
+
 
 export async function signUp(username, email, password,) {
   const res = await fetch("http://localhost:3000/api/auth/signup", {

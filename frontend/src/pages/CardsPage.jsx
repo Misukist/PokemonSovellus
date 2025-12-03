@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import CardList from "../components/CardList";
 
-const CardsPage = () => {
+const CardsPage = ({ authUser }) => {
   const [search, setSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
+  const navigate = useNavigate();
 
   // Debounce: odota 500ms ennen kuin päivitämme debouncedSearch
   useEffect(() => {
@@ -13,6 +15,73 @@ const CardsPage = () => {
 
     return () => clearTimeout(handler);
   }, [search]);
+
+  const handleAuthError = () => {
+    alert("Please sign in first!");
+    navigate("/signin");
+  };
+
+  // Lisää kortti backendin collectioniin
+  const handleAddCard = async (card) => {
+    if (!authUser) {
+      handleAuthError();
+      return;
+    }
+
+    try {
+      const res = await fetch("http://localhost:3000/api/collection/save", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify(card),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        if (data.error?.includes("Not authenticated")) {
+          handleAuthError();
+        } else if (data.error?.includes("duplicate")) {
+          alert("Card is already in your collection!");
+        } else {
+          alert(data.error || "Failed to add card");
+        }
+        return;
+      }
+
+      alert("Card added to collection!");
+    } catch (err) {
+      console.error(err);
+      alert("Server error while saving the card");
+    }
+  };
+
+  // Poista kortti backendistä
+  const handleDeleteCard = async (cardId) => {
+    if (!authUser) {
+      handleAuthError();
+      return;
+    }
+
+    try {
+      const res = await fetch(`http://localhost:3000/api/collection/${cardId}`, {
+        method: "DELETE",
+        credentials: "include",
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        alert(data.error || "Failed to delete card");
+        return;
+      }
+
+      alert("Card removed from collection!");
+    } catch (err) {
+      console.error(err);
+      alert("Server error while deleting the card");
+    }
+  };
 
   return (
     <div className="relative flex flex-col min-h-screen text-white bg-neutral-900">
@@ -53,7 +122,11 @@ const CardsPage = () => {
         <div className="bg-linear-to-r h-1 mb-9 from-red-900 via-purple-950 to-red-900" />
 
         {/* Card lista */}
-        <CardList search={debouncedSearch} />
+        <CardList
+          search={debouncedSearch}
+          onAddCard={handleAddCard}
+          onDeleteCard={handleDeleteCard}
+        />
       </div>
     </div>
   );

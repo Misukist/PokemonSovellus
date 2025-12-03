@@ -9,16 +9,27 @@ const CardList = ({ search }) => {
 
   const pageSize = 20;
 
-  const handleSaveCard = (card) => {
-    console.log("Saved card:", card);
-    // täällä voit tehdä API-kutsun MongoDB:hen
+  const saveToCache = (cardsArray, searchTerm) => {
+    sessionStorage.setItem(`cachedCards-${searchTerm}`, JSON.stringify(cardsArray));
   };
 
+  const loadFromCache = (searchTerm) => {
+    const cached = sessionStorage.getItem(`cachedCards-${searchTerm}`);
+    return cached ? JSON.parse(cached) : [];
+  };
+
+  const handleSaveCard = (card) => {
+    console.log("Saved card:", card);
+  };
+
+  // Kun search muuttuu, nollataan kortit ja ladataan cache
   useEffect(() => {
-    setCards([]);
     setPage(1);
+    const cachedCards = loadFromCache(search);
+    setCards(cachedCards || []);
   }, [search]);
 
+  // Fetch kortit API:sta
   useEffect(() => {
     const fetchCards = async () => {
       setLoading(true);
@@ -28,7 +39,15 @@ const CardList = ({ search }) => {
         );
         const data = await res.json();
         if (Array.isArray(data)) {
-          setCards(prev => [...prev, ...data]);
+          setCards(prev => {
+            const combined = page === 1 ? data : [...prev, ...data];
+            // poista duplikaatit
+            const unique = combined.filter(
+              (v, i, a) => a.findIndex(c => c.id === v.id) === i
+            );
+            saveToCache(unique, search);
+            return unique;
+          });
         } else {
           console.error("API returned invalid data:", data);
         }
@@ -38,6 +57,7 @@ const CardList = ({ search }) => {
         setLoading(false);
       }
     };
+
     fetchCards();
   }, [page, search]);
 
@@ -57,9 +77,9 @@ const CardList = ({ search }) => {
   return (
     <div>
       <ul className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 p-4">
-        {cards.map(card => (
+        {cards.map((card, index) => (
           <CardListItem
-            key={card.id}
+            key={`${card.id}-${index}`}
             card={card}
             onSaveCard={handleSaveCard}
           />

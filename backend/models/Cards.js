@@ -1,12 +1,18 @@
 import mongoose from "mongoose";
 
 const cardSchema = new mongoose.Schema({
-  id: { type: String, required: true, unique: true },
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true
+  },
+  cardId: String,
   name: String,
+  imageUrl: String,
   types: [String],
   hp: String,
-  images: String,
-}, { timestamps: true });
+  evolvesFrom: String,
+  artist: String
+});
 
-const Card = mongoose.model("Card", cardSchema);
-export default Card;
+export default mongoose.model("Cards", cardSchema);

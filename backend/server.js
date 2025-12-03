@@ -4,6 +4,7 @@ import connectDB from "./utils/ConnectDB.js";
 import userRoutes from "./routes/userRoutes.js";
 import pokemonRoutes from "./routes/pokemonRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
+import cardsRoutes from "./routes/cardsRoutes.js";
 import cookieParser from 'cookie-parser';
 import cors from "cors";
 
@@ -26,6 +27,7 @@ app.use(express.urlencoded({ extended: true })); // form-data
 
 //Reitit
 app.use("/api", userRoutes);
+app.use("/api/collection", cardsRoutes);
 app.use("/api/cards", pokemonRoutes);
 app.use("/api/auth" , authRoutes)
 
