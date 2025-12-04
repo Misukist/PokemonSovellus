@@ -4,7 +4,9 @@
 
     "start": "node backend/server.js",
 
-    "dev": "nodemon backend/server.js"
+    "dev": "nodemon backend/server.js",
+
+    "test": "node backend/test.js"
 
   },
 

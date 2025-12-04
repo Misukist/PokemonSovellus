@@ -1,9 +1,9 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { useNavigate } from "react-router-dom";
 
 const CardListItem = ({ card }) => {
-
-
+  const navigate = useNavigate();
 
   const saveCard = async () => {
     try {
@@ -24,14 +24,30 @@ const CardListItem = ({ card }) => {
 
       const data = await res.json();
 
-      if (!res.ok) {
-        console.error(data);
-        return alert("Failed to save card");
+      //EI KIRJAUTUNUT → OHJAUS SIGN IN
+      if (res.status === 401 || data?.error === "Not authenticated") {
+        alert("Please sign in first!");
+        navigate("/signin");
+        return;
       }
 
+      // DUPLICATE
+      if (!res.ok && data?.error?.toLowerCase().includes("already")) {
+        alert("Card is already in your collection!");
+        return;
+      }
+
+      // MUU VIRHE
+      if (!res.ok) {
+        console.error("Save error:", data);
+        alert(data?.error || "Failed to save card");
+        return;
+      }
+
+      // ONNISTUI
       alert("Card added to collection!");
     } catch (err) {
-      console.error(err);
+      console.error("Network error:", err);
       alert("Server error while saving the card");
     }
   };
@@ -55,7 +71,9 @@ const CardListItem = ({ card }) => {
       </div>
 
       {/* Kortin nimi */}
-      <h3 className="text-center mt-2 font-semibold text-white">{card.name}</h3>
+      <h3 className="text-center mt-2 font-semibold text-white">
+        {card.name}
+      </h3>
 
       {card.types && (
         <p className="text-center text-sm text-gray-300">

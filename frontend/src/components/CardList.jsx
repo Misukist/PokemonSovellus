@@ -38,19 +38,20 @@ const CardList = ({ search }) => {
           `http://localhost:3000/api/cards?page=${page}&pageSize=${pageSize}&search=${encodeURIComponent(search)}`
         );
         const data = await res.json();
-        if (Array.isArray(data)) {
-          setCards(prev => {
-            const combined = page === 1 ? data : [...prev, ...data];
-            // poista duplikaatit
-            const unique = combined.filter(
-              (v, i, a) => a.findIndex(c => c.id === v.id) === i
-            );
-            saveToCache(unique, search);
-            return unique;
-          });
-        } else {
+        if (!Array.isArray(data)) {
           console.error("API returned invalid data:", data);
+          return;
         }
+
+        setCards(prev => {
+          // Säilytetään kaikki kortit, ei duplikaattien poistoa
+          const combined = page === 1 ? data : [...prev, ...data];
+
+          // Päivitä cache vain ensimmäisen sivun haussa
+          if (page === 1) saveToCache(combined, search);
+
+          return combined;
+        });
       } catch (err) {
         console.error(err);
       } finally {
@@ -64,10 +65,12 @@ const CardList = ({ search }) => {
   // Infinite scroll
   useEffect(() => {
     const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting && !loading) setPage(prev => prev + 1);
+      entries => {
+        if (entries[0].isIntersecting && !loading) {
+          setPage(prev => prev + 1);
+        }
       },
-      { threshold: 1 }
+      { threshold: 0.5 }
     );
 
     if (loader.current) observer.observe(loader.current);
@@ -79,7 +82,7 @@ const CardList = ({ search }) => {
       <ul className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 p-4">
         {cards.map((card, index) => (
           <CardListItem
-            key={`${card.id}-${index}`}
+            key={`${card.id}-${index}`} // uniikki key id + index
             card={card}
             onSaveCard={handleSaveCard}
           />

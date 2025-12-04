@@ -35,7 +35,7 @@ export function DropDown() {
     <div ref={dropdownRef} className="relative">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="inline-flex items-center text-md font-bold text-white sm:hover:border-indigo-400 hover:text-red-800 hover:bg-gray-300 sm:hover:bg-transparent rounded-lg p-1"
+        className="inline-flex items-center text-md font-bold text-white sm:hover:border-indigo-400 hover:text-red-800  sm:hover:bg-transparent rounded-lg p-1"
       >
         Profile
         <svg xmlns="http://www.w3.org/2000/svg" className={`w-5 h-5 mt-0.5 mr-1 transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`} viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">

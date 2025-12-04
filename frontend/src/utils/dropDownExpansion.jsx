@@ -27,7 +27,7 @@ export function DropdownExpansion() {
       <button
         id="dropdown-button-expansion"
         onClick={() => setIsOpen(!isOpen)}
-        className="inline-flex overflow-hidden text-md font-bold text-white sm:hover:border-indigo-400 hover:text-red-800 hover:bg-gray-300 sm:hover:bg-transparent rounded-lg p-1"
+        className="inline-flex overflow-hidden text-md font-bold text-white sm:hover:border-indigo-400 hover:text-red-800 sm:hover:bg-transparent rounded-lg p-1"
       >
         Expansions
         <svg
@@ -70,7 +70,7 @@ export function DropdownExpansion() {
             alt="Phantasmal"
             className="w-[200px] h-20 object-contain bg-black border-2"
           />
-          Pokémon TCG: Phantasmal Flames
+          Phantasmal Flames
         </Link>
 
         <Link
@@ -83,7 +83,7 @@ export function DropdownExpansion() {
             alt="Mega"
             className="w-[207px] h-12 object-contain bg-black border-2"
           />
-          Pokémon TCG: Mega Evolution
+          Mega Evolution
         </Link>
 
         <Link
@@ -96,7 +96,7 @@ export function DropdownExpansion() {
             alt="Scarlet"
             className="w-[200px] h-20 object-contain bg-black border-2"
           />
-          Pokémon TCG: Scarlet & Violet – Black Bolt and White Flare
+          Scarlet & Violet – Black Bolt and White Flare
         </Link>
 
         <hr className="relative border-t-4 border-red-900" />

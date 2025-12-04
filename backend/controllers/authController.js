@@ -117,3 +117,22 @@ export const getMe = async (req, res) => {
     }
 };
 
+
+export const updateSettings = async (req, res) => {
+  try {
+    const userId = req.user.id; // oletetaan, että auth middleware on asettanut req.user
+    const { email, username, password } = req.body;
+
+    const updates = {};
+    if (email) updates.email = email;
+    if (username) updates.username = username;
+    if (password) updates.password = password; // täällä voisi hashata passwordin ennen tallennusta
+
+    const updatedUser = await User.findByIdAndUpdate(userId, updates, { new: true });
+
+    res.status(200).json({ message: "Settings updated", user: updatedUser });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to update settings" });
+  }
+};

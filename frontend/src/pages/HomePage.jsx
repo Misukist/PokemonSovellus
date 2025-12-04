@@ -1,14 +1,25 @@
 import { useState } from 'react';
 import useNextPokemon from '../utils/imgChange';
+import { useNavigate } from 'react-router-dom';
 
 const HomePage = () => {
 
-    const [fade, setFade] = useState(false);
+  const [fade, setFade] = useState(false);
     
   const [style, setStyle] = useState({});
 
   const { pokemons, index, nextPokemon, prevPokemon, pokeNames, pokeCards, handleNextPokemon } = useNextPokemon();
 
+  
+  const navigate = useNavigate();
+
+  const goToPhantasmal = () => {
+    navigate("/phantasmal");
+  };
+
+  const goToCard = () => {
+    navigate("/cards");
+  };
 
   const handleMouseLeave = () => {
     setStyle({ transform: 'rotateX(0deg) rotateY(0deg) scale(1)' });
@@ -31,10 +42,10 @@ const HomePage = () => {
       {/* Keskitetty sisältö */}
       <div className="grow flex items-center justify-between relative z-10 pt-16 px-50">
         <div className="flex flex-col gap-4 items-center">
-          <button className="bg-linear-to-r transition duration-500 ease-in-out from-purple-800 to-purple-950 rounded-full px-9 py-4 text-lg md:text-xl lg:text-2xl hover:to-red-600 shadow-lg shadow-neutral-900 hover:shadow-red-500/50">
-            Go to the expansion page
+          <button onClick={goToPhantasmal} className="bg-linear-to-r transition duration-500 ease-in-out from-purple-800 to-purple-950 rounded-full px-9 py-4 text-lg md:text-xl lg:text-2xl hover:to-red-600 shadow-lg shadow-neutral-900 hover:shadow-red-500/50">
+            Go to the latest expansion page
           </button>
-          <button  className="bg-linear-to-r transition duration-500 ease-in-out from-red-800 to-red-950 rounded-full px-9 py-4 text-lg md:text-xl lg:text-2xl hover:to-purple-600 shadow-lg shadow-neutral-900 hover:shadow-purple-500/50">
+          <button onClick={goToCard} className="bg-linear-to-r transition duration-500 ease-in-out from-red-800 to-red-950 rounded-full px-9 py-4 text-lg md:text-xl lg:text-2xl hover:to-purple-600 shadow-lg shadow-neutral-900 hover:shadow-purple-500/50">
             See Card Gallery
           </button>
         </div>
