@@ -1,7 +1,7 @@
 // api/auth.js
 export const loginUser = async (email, password) => {
   try {
-    const res = await fetch("http://localhost:3000/api/auth/login", {
+    const res = await fetch("/api/auth/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "include", // tarvitaan cookieille
@@ -23,7 +23,7 @@ export const loginUser = async (email, password) => {
 
 
 export async function signUp(username, email, password,) {
-  const res = await fetch("http://localhost:3000/api/auth/signup", {
+  const res = await fetch("/api/auth/signup", {
     method: "POST",
     credentials: "include",
     headers: { "Content-Type": "application/json" },
