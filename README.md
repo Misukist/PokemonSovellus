@@ -4,7 +4,9 @@
 - Sähköposti: `testi4@gmail.com`  
 - Salasana: `123456`  
 
-> ⚠️ **Tärkeä huomio:** Pokémon TCG API ei tällä hetkellä toimi täysin luotettavasti sillä pokemon api on todella huono. Tästä syystä korttien lataaminen "Cards" ja "Expansions" -osioihin saattaa kestää kauan. Korttien lisäämistä, hakemista ja poistamista voi kuitenkin testata saumattomasti "My Collection" -osiosta.
+> ⚠️ **Tärkeä huomio:** Pokémon TCG API ei tällä hetkellä toimi täysin luotettavasti sillä pokemon api on todella huono. Tästä syystä korttien lataaminen "Cards" ja "Expansions" -osioihin saattaa kestää kauan. Korttien lisäämistä, hakemista ja poistamista voi kuitenkin testata saumattomasti "My Collection" -osiosta. APi 
+>
+> 🐛 API antaa myös ihmeellisen bugin, jossa se fetchaa samat alkurivit ja niille korteille ei voi tehdä mitään.
 
 ---
 
