@@ -54,7 +54,7 @@ const CardsPage = () => {
   // POISTA KORTTI COLLECTIONISTA
   const handleDeleteCard = async (cardId) => {
     try {
-      const res = await fetch(`http://localhost:3000/api/collection/${cardId}`, {
+      const res = await fetch(`/api/collection/${cardId}`, {
         method: "DELETE",
         credentials: "include",
       });
