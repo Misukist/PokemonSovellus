@@ -7,9 +7,14 @@ import authRoutes from "./routes/authRoutes.js";
 import cardsRoutes from "./routes/cardsRoutes.js";
 import cookieParser from 'cookie-parser';
 import cors from "cors";
+import path from "path";
+import { fileURLToPath } from "url";
 
 const app = express();
 const port = process.env.PORT || 3000;
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 dotenv.config()
 connectDB();
@@ -30,5 +35,12 @@ app.use("/api", userRoutes);
 app.use("/api/collection", cardsRoutes);
 app.use("/api/cards", pokemonRoutes);
 app.use("/api/auth" , authRoutes)
+
+// React build
+app.use(express.static(path.join(__dirname, "../Frontend/dist")));
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../Frontend/dist/index.html"));
+});
 
 app.listen(port, () => console.log(`Server running on port ${port}`));

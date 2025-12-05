@@ -6,7 +6,9 @@
 
     "dev": "nodemon backend/server.js",
 
-    "test": "node backend/test.js"
+    "test": "node backend/test.js",
+
+    "build": "cd Frontend && npm install && npm run build"
 
   },
 
