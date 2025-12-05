@@ -6,41 +6,34 @@ import pokemonRoutes from "./routes/pokemonRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import cardsRoutes from "./routes/cardsRoutes.js";
 import cookieParser from 'cookie-parser';
-import cors from "cors";
 import path from "path";
-import { fileURLToPath } from "url";
 
 const app = express();
 const port = process.env.PORT || 3000;
 const __dirname = path.resolve();
-const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:5173";
 
-dotenv.config()
+dotenv.config();
 connectDB();
 app.use(cookieParser());
-app.use(cors({
-    origin: FRONTEND_URL, // tai "*" testauksessa
-    credentials: true,               // jos lähetät cookies
-}));
-
-const API_KEY = process.env.POKEMON_TCG_KEY;
 
 // Middleware body dataa varten
 app.use(express.json());            // JSON
 app.use(express.urlencoded({ extended: true })); // form-data
 
-//Reitit
+// API-reitit
 app.use("/api", userRoutes);
 app.use("/api/collection", cardsRoutes);
 app.use("/api/cards", pokemonRoutes);
-app.use("/api/auth" , authRoutes)
+app.use("/api/auth", authRoutes);
 
+// Production: palvele frontend build
 if (process.env.NODE_ENV === "production") {
-	app.use(express.static(path.join(__dirname, "/frontend/dist")));
+  app.use(express.static(path.join(__dirname, "frontend/dist")));
 
-	app.get(/^(?!\/api).*/, (req, res) => {
-		res.sendFile(path.resolve(__dirname, "frontend", "dist", "index.html"));
-	});
+  // Kaikki muut kuin /api -reitit menevät Reactille
+  app.get(/^(?!\/api).*/, (req, res) => {
+    res.sendFile(path.resolve(__dirname, "frontend", "dist", "index.html"));
+  });
 }
 
 app.listen(port, () => console.log(`Server running on port ${port}`));
