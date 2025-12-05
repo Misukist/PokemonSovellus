@@ -13,12 +13,13 @@ import { fileURLToPath } from "url";
 const app = express();
 const port = process.env.PORT || 3000;
 const __dirname = path.resolve();
+const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:5173";
 
 dotenv.config()
 connectDB();
 app.use(cookieParser());
 app.use(cors({
-    origin: "http://localhost:5173", // tai "*" testauksessa
+    origin: FRONTEND_URL, // tai "*" testauksessa
     credentials: true,               // jos lähetät cookies
 }));
 
