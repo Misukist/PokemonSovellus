@@ -19,7 +19,7 @@ const CardsPage = () => {
   // LISÄÄ KORTTI COLLECTIONIIN
   const handleAddCard = async (card) => {
     try {
-      const res = await fetch("http://localhost:3000/api/collection/save", {
+      const res = await fetch("/api/collection/save", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",

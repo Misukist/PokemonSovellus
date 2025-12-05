@@ -56,7 +56,7 @@ export const ModalLiveDemoExample = () => {
     }
 
     try {
-      const res = await fetch("http://localhost:3000/api/auth/settings", {
+      const res = await fetch("/api/auth/settings", {
         method: "POST", 
         headers: { "Content-Type": "application/json" },
         credentials: "include",

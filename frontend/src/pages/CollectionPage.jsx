@@ -13,7 +13,7 @@ const CollectionPage = () => {
   const { data: authUser, isLoading: authLoading } = useQuery({
     queryKey: ["authUser"],
     queryFn: async () => {
-      const res = await fetch("http://localhost:3000/api/auth/me", {
+      const res = await fetch("/api/auth/me", {
         credentials: "include",
       });
       if (!res.ok) return null;
@@ -26,7 +26,7 @@ const CollectionPage = () => {
   const fetchCollection = async () => {
     if (!authUser) return; // jos ei kirjautunut
     try {
-      const res = await fetch("http://localhost:3000/api/collection/my-cards", {
+      const res = await fetch("/api/collection/my-cards", {
         credentials: "include",
       });
       const data = await res.json();
@@ -49,7 +49,7 @@ const CollectionPage = () => {
   // Poista kortti backendistä
   const handleDeleteCard = async (id) => {
     try {
-      const res = await fetch(`http://localhost:3000/api/collection/${id}`, {
+      const res = await fetch(`/api/collection/${id}`, {
         method: "DELETE",
         credentials: "include",
       });

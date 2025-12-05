@@ -7,7 +7,7 @@ const CardListItem = ({ card }) => {
 
   const saveCard = async () => {
     try {
-      const res = await fetch("http://localhost:3000/api/collection/save", {
+      const res = await fetch("/api/collection/save", {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },

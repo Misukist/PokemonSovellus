@@ -35,7 +35,7 @@ const CardList = ({ search }) => {
       setLoading(true);
       try {
         const res = await fetch(
-          `http://localhost:3000/api/cards?page=${page}&pageSize=${pageSize}&search=${encodeURIComponent(search)}`
+          `/api/cards?page=${page}&pageSize=${pageSize}&search=${encodeURIComponent(search)}`
         );
         const data = await res.json();
         if (!Array.isArray(data)) {
