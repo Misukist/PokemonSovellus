@@ -1,15 +1,15 @@
 import { useState, useRef, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import Phantasmal from "../assets/Phantasmal.png";
 import Mega from "../assets/Mega.png";
 import Scarlet from "../assets/Scarlet.png";
-import { Link } from "react-router-dom";
-
 
 export function DropdownExpansion() {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
+  const navigate = useNavigate();
 
-  // sulkee kun klikataan ulos
+  // Sulkee dropdownin kun klikataan ulkopuolelle
   useEffect(() => {
     function handleClickOutside(e) {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
@@ -20,6 +20,12 @@ export function DropdownExpansion() {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+  // Funktio navigointiin ilman sivun uudelleenlatausta
+  const handleNavigation = (path) => {
+    setIsOpen(false);
+    navigate(path);
+  };
 
   return (
     <div ref={dropdownRef} className="relative inline-block text-left">
@@ -32,9 +38,7 @@ export function DropdownExpansion() {
         Expansions
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          className={`w-5 h-5 mt-0.5 mr-1 transition-transform duration-200 ${
-            isOpen ? "rotate-180" : ""
-          }`}
+          className={`w-5 h-5 mt-0.5 mr-1 transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
           viewBox="0 0 20 20"
           fill="currentColor"
           aria-hidden="true"
@@ -60,44 +64,30 @@ export function DropdownExpansion() {
           Recent Expansions
         </p>
 
-        <Link
-          to="/phantasmal"
-          onClick={() => setIsOpen(false)}
+        {/* SPA-navigointi nappuloilla */}
+        <button
+          onClick={() => handleNavigation("/phantasmal")}
           className="flex items-center whitespace-nowrap gap-3 px-4 py-2 text-white hover:text-red-900 cursor-pointer rounded-md"
         >
-          <img
-            src={Phantasmal}
-            alt="Phantasmal"
-            className="w-[200px] h-20 object-contain bg-black border-2"
-          />
+          <img src={Phantasmal} alt="Phantasmal" className="w-[200px] h-20 object-contain bg-black border-2" />
           Phantasmal Flames
-        </Link>
+        </button>
 
-        <Link
-          to="/mega"
-          onClick={() => setIsOpen(false)}
+        <button
+          onClick={() => handleNavigation("/mega")}
           className="flex items-center gap-3 px-4 py-2 text-white hover:text-red-900 cursor-pointer rounded-md"
         >
-          <img
-            src={Mega}
-            alt="Mega"
-            className="w-[207px] h-12 object-contain bg-black border-2"
-          />
+          <img src={Mega} alt="Mega" className="w-[207px] h-12 object-contain bg-black border-2" />
           Mega Evolution
-        </Link>
+        </button>
 
-        <Link
-          to="/scarlet"
-          onClick={() => setIsOpen(false)}
+        <button
+          onClick={() => handleNavigation("/scarlet")}
           className="flex items-center gap-3 px-4 py-2 text-white hover:text-red-900 cursor-pointer rounded-md"
         >
-          <img
-            src={Scarlet}
-            alt="Scarlet"
-            className="w-[200px] h-20 object-contain bg-black border-2"
-          />
+          <img src={Scarlet} alt="Scarlet" className="w-[200px] h-20 object-contain bg-black border-2" />
           Scarlet & Violet – Black Bolt and White Flare
-        </Link>
+        </button>
 
         <hr className="relative border-t-4 border-red-900" />
       </div>
