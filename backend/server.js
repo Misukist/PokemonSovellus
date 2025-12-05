@@ -12,9 +12,7 @@ import { fileURLToPath } from "url";
 
 const app = express();
 const port = process.env.PORT || 3000;
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const __dirname = path.resolve();
 
 dotenv.config()
 connectDB();
@@ -36,11 +34,12 @@ app.use("/api/collection", cardsRoutes);
 app.use("/api/cards", pokemonRoutes);
 app.use("/api/auth" , authRoutes)
 
-// React build
-app.use(express.static(path.join(__dirname, "../Frontend/dist")));
+if (process.env.NODE_ENV === "production") {
+	app.use(express.static(path.join(__dirname, "/frontend/dist")));
 
-app.get("/*", (req, res) => {
-  res.sendFile(path.join(__dirname, "../Frontend/dist/index.html"));
-});
+	app.get(/^(?!\/api).*/, (req, res) => {
+		res.sendFile(path.resolve(__dirname, "frontend", "dist", "index.html"));
+	});
+}
 
 app.listen(port, () => console.log(`Server running on port ${port}`));
