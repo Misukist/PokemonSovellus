@@ -19,8 +19,8 @@ Backend-toteutus tehdään **Node.js + Express** -pohjaisesti, ja siinä käytet
 ---
 
 ## 🖼️ Esikatselu
-![ShowCase](frontend/assets/Frontpage.jpg)
-![ShowCase](frontend/assets/Cards.jpg)
+![ShowCase](frontend/src/assets/Frontpage.jpg)
+![ShowCase](frontend/src/assets/Cards.jpg)
 ---
 
 ## 🚀Ominaisuudet
