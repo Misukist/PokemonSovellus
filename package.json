@@ -8,7 +8,7 @@
 
     "test": "node backend/test.js",
 
-    "build": "cd Frontend && npm install && npm run build"
+    "build": "cd frontend && npm install && npm run build"
 
   },
 
