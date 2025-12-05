@@ -19,18 +19,24 @@ const SignIn = () => {
     if (!data.error) {
       console.log("Login success! Navigating to /cards");
 
+      // Näytä alert onnistuneesta loginista
+      alert("Login successful!"); 
+
       // Refreshaa authUser query
       queryClient.invalidateQueries(["authUser"]);
 
       navigate("/cards"); // React Routerin kautta
     } else {
       setMsg(data.error);
+      alert(`Login failed: ${data.error}`); // Näytä virheilmoitus käyttäjälle
     }
   } catch (error) {
     setMsg("Jokin meni pieleen");
     console.log(error);
+    alert("Jokin meni pieleen. Yritä uudelleen."); // Alert virhetilanteessa
   }
-};
+  };
+
 
   return (
       <div className="flex justify-center items-center w-screen h-screen bg-linear-to-br from-neutral-900 to-neutral-950">
